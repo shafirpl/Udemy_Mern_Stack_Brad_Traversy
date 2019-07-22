@@ -13,6 +13,15 @@ const app = express();
 // Connect Database
 connectDB();
 
+// Middleware initialization
+/*
+* Usually we used to install body parser and do
+* app.use(bodyparser.json()). But now bodyparser comes
+* packaged with express. So we just have to do express.json()
+* to use bodyparser
+*/
+app.use(express.json({extended: false}));
+
 app.get("/", (req,res) => {res.send('API Running')});
 
 // Define Routes
