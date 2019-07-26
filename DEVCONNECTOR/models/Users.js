@@ -23,7 +23,7 @@ const userSchema = new mongoose.Schema({
         type: String,
     },
     date: {
-        type: date,
+        type: Date,
         // this will give us current date and time
         default: Date.now()
     }
