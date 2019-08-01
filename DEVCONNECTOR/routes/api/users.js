@@ -13,6 +13,11 @@ const User = require("../../models/Users");
  * @description: Register user
  * @access Public
  *
+ * Here all the authentication are for new user/ user who are 
+ * just signing up. After sign up, we assume the user is logged in
+ * as well and so we do json web token stuff so that the newly
+ * created/signed up user has access to private/protected routes
+ * 
  * Here we are running express validator as middleware in the []
  * section
  * What we are doing here is checking/validating email, password
@@ -55,11 +60,22 @@ router.post(
      * 2. Get users gravatar (https://en.gravatar.com/)
      * 3. Encrypt the password using bcrypt
      * 4. Return jsonwebtoken
+     * The reason we are returning web token, is we are assuming
+     * that after the user created the account, s/he will be logged in
+     * automatically. So we need that web token to give access to the protected routes
      */
 
     /*
      * here we are doing array destructuring to pull out
      * necessary information
+     * Recall from node course that this is the standard way
+     * of pulling out information, we used to use body parser
+     * to grab data like this but now bodyparser comes included
+     * with node js
+     * 
+     * Our goal here is that, after validation, we wanna make 
+     * sure that the user doesn't exist, because if the user
+     * exists, there is no point in making the same user
      */
     const { name, email, password } = req.body;
 
@@ -131,7 +147,7 @@ router.post(
       * user.save())
       */
 
-        //json web token
+        //generating json web token
         const payload = {
             user: {
                 id: user.id,
