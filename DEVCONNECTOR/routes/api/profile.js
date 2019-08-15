@@ -163,6 +163,25 @@ router.post(
                             profileFields.social.linkedin = linkedin;
                           if (instagram)
                             profileFields.social.instagram = instagram;
+
+                          try {
+                            let profile =await Profile.findOne({user: req.user.id });
+                            if(profile){
+                              // update existing profile if profile exists
+                              /*
+                              * https://mongoosejs.com/docs/tutorials/findoneandupdate.html
+                              */
+                              profile = await Profile.findOneAndUpdate({ user: req.user.id},{$set: profileFields}, {new: true});
+                              return res.json(profile);
+                            }
+                            // if profile doesn't exist, create new one
+                            profile = new Profile(profileFields);
+                            await Profile.save();
+                            return res.json(profile);
+                          } catch (error) {
+                            console.error(error.message);
+                            res.status(500).send("Server Error");
+                          }
                         }
 );
 
