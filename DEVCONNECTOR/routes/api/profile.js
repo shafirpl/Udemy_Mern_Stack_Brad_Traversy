@@ -300,10 +300,10 @@ router.put(
       const profile = await Profile.findOne({ user: req.user.id });
       // https://www.w3schools.com/jsref/jsref_unshift.asp
       /*
-      * The reason we are using unshift, we want the most recent experiences
-      * at first/begining of the array, which makes sense as in the resume we 
-      * list recent experiences at the top/begining
-      */
+       * The reason we are using unshift, we want the most recent experiences
+       * at first/begining of the array, which makes sense as in the resume we
+       * list recent experiences at the top/begining
+       */
       profile.experience.unshift(newExp);
       await profile.save();
       res.json(profile);
@@ -313,5 +313,46 @@ router.put(
     }
   }
 );
+
+/*
+ * @route DELETE api/profile/experience/:exp_id
+ * @description: Delete experience from profile
+ * @access Private
+ */
+
+router.delete("/experience/:exp_id", auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    //get remove index
+    /*
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
+     * https://stackoverflow.com/questions/8668174/indexof-method-in-an-object-array
+     * So in order for index of to work, we need exact match.
+     * For example, in the mozilla document, since the array only contains string, bison matches with
+     * bison without issue. However, in object array, we don't have that luxury. So we need to run a loop, and 
+     * then retun the thing/property of that object in the array
+     * that can be matched exactly with the option in the indexOf stuff. So here 
+     * we want id to be matching, that is why we are doing map function and returning the id. 
+     * 
+     * In the stack overflow, that stevie has to be matched with stevie, which comes from hello property. 
+     * That is why we have to map to get the hello property and then on top of it use the indexOf method.
+     */
+    // const removeIndex = profile.experience
+    //   .map(item => item.id)
+    //   .indexOf(req.params.exp_id);
+    // profile.experience.splice(removeIndex, 1);
+
+    //my way
+    profile.experience = profile.experience.filter(
+      item => item.id !== req.params.exp_id
+    );
+    await profile.save();
+    res.json(profile);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
 
 module.exports = router;
