@@ -225,4 +225,29 @@ router.get("/user/:user_id", async (req, res) => {
   }
 });
 
+/*
+ * @route DELETE api/profile/user/:user_id
+ * @description: Delete profile, user and posts
+ * @access Private
+ */
+
+router.delete("/", auth, async (req, res) => {
+  try {
+    /*
+     * Remember when we are coming out of the auth middleware, our request object will contain
+     * the user object info. That is why we don't need req.params,
+     * Check line 32 in auth.js file,  req.user = decoded.user;
+     */
+    // @todo - remove user posts
+    // Remove profile
+    await Profile.findOneAndRemove({ user: req.user.id });
+    // Remove User
+    await User.findOneAndRemove({ _id: req.user.id });
+    res.json({msg: 'User Deleted'});
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
 module.exports = router;
