@@ -330,12 +330,12 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
      * https://stackoverflow.com/questions/8668174/indexof-method-in-an-object-array
      * So in order for index of to work, we need exact match.
      * For example, in the mozilla document, since the array only contains string, bison matches with
-     * bison without issue. However, in object array, we don't have that luxury. So we need to run a loop, and 
+     * bison without issue. However, in object array, we don't have that luxury. So we need to run a loop, and
      * then retun the thing/property of that object in the array
-     * that can be matched exactly with the option in the indexOf stuff. So here 
-     * we want id to be matching, that is why we are doing map function and returning the id. 
-     * 
-     * In the stack overflow, that stevie has to be matched with stevie, which comes from hello property. 
+     * that can be matched exactly with the option in the indexOf stuff. So here
+     * we want id to be matching, that is why we are doing map function and returning the id.
+     *
+     * In the stack overflow, that stevie has to be matched with stevie, which comes from hello property.
      * That is why we have to map to get the hello property and then on top of it use the indexOf method.
      */
     // const removeIndex = profile.experience
@@ -346,6 +346,115 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
     //my way
     profile.experience = profile.experience.filter(
       item => item.id !== req.params.exp_id
+    );
+    await profile.save();
+    res.json(profile);
+  } catch (error) {
+    console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+/*
+ * @route PUT api/profile/education
+ * @description: ADD Profile education
+ * @access Private
+ */
+
+router.put(
+  "/education",
+  [
+    auth,
+    [
+      check("school", "School is required")
+        .not()
+        .isEmpty(),
+      check("degree", "Degree is required")
+        .not()
+        .isEmpty(),
+      check("fieldofstudy", "Field of study is required")
+        .not()
+        .isEmpty(),
+      check("from", "From date is required")
+        .not()
+        .isEmpty()
+    ]
+  ],
+  async (req, res) => {
+    const errors = validationResult(req);
+    if (!errors.isEmpty()) {
+      return res.status(400).json({ errors: errors.array() });
+    }
+    const {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    } = req.body;
+
+    const newEdu = {
+      school,
+      degree,
+      fieldofstudy,
+      from,
+      to,
+      current,
+      description
+    };
+
+    try {
+      const profile = await Profile.findOne({ user: req.user.id });
+      // https://www.w3schools.com/jsref/jsref_unshift.asp
+      /*
+       * The reason we are using unshift, we want the most recent educations
+       * at first/begining of the array, which makes sense as in the resume we
+       * list recent experiences at the top/begining
+       */
+      profile.education.unshift(newEdu);
+      await profile.save();
+      res.json(profile);
+    } catch (error) {
+      console.error(error.message);
+      res.status(500).send("Server Error");
+    }
+  }
+);
+
+/*
+ * @route DELETE api/profile/education/:edu_id
+ * @description: Delete education from profile
+ * @access Private
+ */
+
+router.delete("/education/:edu_id", auth, async (req, res) => {
+  try {
+    const profile = await Profile.findOne({ user: req.user.id });
+
+    //get remove index
+    /*
+     * https://developer.mozilla.org/en-US/docs/Web/JavaScript/Reference/Global_Objects/Array/indexOf
+     * https://stackoverflow.com/questions/8668174/indexof-method-in-an-object-array
+     * So in order for index of to work, we need exact match.
+     * For example, in the mozilla document, since the array only contains string, bison matches with
+     * bison without issue. However, in object array, we don't have that luxury. So we need to run a loop, and
+     * then retun the thing/property of that object in the array
+     * that can be matched exactly with the option in the indexOf stuff. So here
+     * we want id to be matching, that is why we are doing map function and returning the id.
+     *
+     * In the stack overflow, that stevie has to be matched with stevie, which comes from hello property.
+     * That is why we have to map to get the hello property and then on top of it use the indexOf method.
+     */
+    // const removeIndex = profile.experience
+    //   .map(item => item.id)
+    //   .indexOf(req.params.exp_id);
+    // profile.experience.splice(removeIndex, 1);
+
+    //my way
+    profile.education = profile.education.filter(
+      item => item.id !== req.params.edu_id
     );
     await profile.save();
     res.json(profile);
