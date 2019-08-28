@@ -2,6 +2,8 @@ const express = require("express");
 const router = express.Router();
 const auth = require("../../middleware/auth");
 const { check, validationResult } = require("express-validator");
+const request = require("request");
+const config = require("config");
 
 const Profile = require("../../models/Profile");
 const User = require("../../models/Users");
@@ -460,6 +462,52 @@ router.delete("/education/:edu_id", auth, async (req, res) => {
     res.json(profile);
   } catch (error) {
     console.error(error.message);
+    res.status(500).send("Server Error");
+  }
+});
+
+/*
+ * @route GET api/profile/github/:username
+ * @description: Get users repo from GitHub
+ * @access Public
+ */
+
+router.get("/github/:username", async (req, res) => {
+  try {
+    const options = {
+      /*
+       * The last part after ? is a query, it tells that take 5 per page and sorts them
+       * by created in ascending order
+       * So on August 28, 2019, if i send this request to my profile, Udemy_mern_Stack will come 
+       * first as it was the most recent one, and only 5 most recent github repos will be shown
+       *
+       * So the way it works is that, we create a options object with the uri, method and 
+       * headers, and then use request package to make a http request to github api, and then
+       * grab the data and show it. Thats just it.
+       * 
+       * Documentaiton for request package: https://www.npmjs.com/package/request
+       * Basically it is just like grapql/axios, it makes an http request
+       */
+      uri: `https://api.github.com/users/${
+        req.params.username
+      }/repos?per_page=5&sort=created:asc&client_id=${config.get(
+        "githubClientId"
+      )}&client_secret=${config.get("githubSecret")}`,
+      method: "GET",
+      headers: { "user-agent": "node.js" }
+    };
+
+    request(options, (error, response, body)=>{
+      if(error) console.error(error);
+
+      if(response.statusCode !== 200){
+        return res.status(404).json({msg: 'No GitHub Profile Found'})
+      }
+
+      return res.json(JSON.parse(body));
+    } )
+  } catch (error) {
+    console.error(err.message);
     res.status(500).send("Server Error");
   }
 });
