@@ -58,6 +58,12 @@ router.get("/me", auth, async (req, res) => {
  * passed x-auth-token that we get when logging in. Auth.js file does that
  * checking.
  * Then we check if the user actually provided the status and skills
+ * This is how we chain middlewares
+ * The reason we put all the check stuff in another array, is for code 
+ * understandibility
+ * We could actually not use the second set of array for check, just could do
+ * auth, check stuff1, check stuff2 etc
+ * 
  */
 router.post(
   "/",
@@ -176,7 +182,7 @@ router.post(
       res.status(500).send("Server Error");
     }
   }
-  //hrllo
+  
 );
 
 /*
