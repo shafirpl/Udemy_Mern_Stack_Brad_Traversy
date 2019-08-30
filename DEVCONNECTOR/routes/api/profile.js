@@ -223,6 +223,11 @@ router.get("/user/:user_id", async (req, res) => {
     /*
      * https://www.udemy.com/mern-stack-front-to-back/learn/lecture/10055206?start=60#overview
      * From 9:24
+     * The reason we do this, we want to get 500 status if and only if there is a server error,
+     * nothing else. So invalid object id would directly come here and show us the error, but 
+     * that error is because of the invalid object id, not because there was actually something wrong
+     * with ther server. That is why we run this check to make sure we only get server error if and only 
+     * if it is an actual server error.
      */
     if (error.kind == "ObjectId") {
       return res.status(400).json({

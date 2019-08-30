@@ -46,4 +46,90 @@ router.post('/', [auth, [
 
     });
 
+/*
+* @route GET api/posts
+* @description: Get All Posts
+* @access Private
+*/
+router.get('/', auth, async (req, res) => {
+    try {
+        /*
+        * this date:-1 will sort stuff based on recent dates. So posts with latest dates will be
+        * top
+        */
+        const posts = await Post.find().sort({ date: -1 });
+        res.json(posts);
+    } catch (error) {
+        console.error(error.message);
+        res.status(500).send("Server Error");
+    }
+})
+
+/*
+* @route GET api/posts/:id
+* @description: Get Post By Id
+* @access Private
+*/
+router.get('/:id', auth, async (req, res) => {
+    try {
+        /*
+        * this date:-1 will sort stuff based on recent dates. So posts with latest dates will be
+        * top
+        */
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ msg: 'Post not found' });
+        }
+        res.json(post);
+    } catch (error) {
+        console.error(error.message);
+        /*
+        * https://www.udemy.com/mern-stack-front-to-back/learn/lecture/10055222?start=30#questions
+        * Starts from 5:04
+        * The reason we do this, we want to get 500 status if and only if there is a server error,
+        * nothing else. So invalid object id would directly come here and show us the error, but 
+        * that error is because of the invalid object id, not because there was actually something wrong
+        * with ther server. That is why we run this check to make sure we only get server error if and only 
+        * if it is an actual server error.
+        */
+        if (error.kind == "ObjectId") {
+            return res.status(404).json({ msg: "Post not found" });
+        }
+        res.status(500).send("Server Error");
+    }
+})
+
+/*
+* @route DELETE api/posts/:id
+* @description: Delete a post
+* @access Private
+*/
+router.delete('/:id', auth, async (req, res) => {
+    try {
+        const post = await Post.findById(req.params.id);
+        if (!post) {
+            return res.status(404).json({ msg: "Post not found" });
+        }
+        // check to see if the user actually owns the post
+        /*
+        * post.user is an object, so in order to be compatible, we 
+        * have to convert it to a string
+        */
+        if (post.user.toString() !== req.user.id) {
+            return res.status(401).json({ msg: 'User not authorized' });
+        }
+
+        await post.remove();
+        res.json({ msg: 'Post removed' });
+    } catch (error) {
+        console.error(error.message);
+        if (error.kind == "ObjectId") {
+            return res.status(404).json({ msg: "Post not found" });
+        }
+        res.status(500).send("Server Error");
+    }
+})
+
+
+
 module.exports = router;
