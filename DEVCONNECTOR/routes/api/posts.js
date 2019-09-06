@@ -190,4 +190,90 @@ router.put('/unlike/:id', auth, async (req, res) => {
     }
 })
 
+/*
+* @route POST api/posts/comment/:id
+* @description: Comment on a post
+* @access Private
+*/
+router.post(
+    "/comment/:id",
+    [
+        auth,
+        [
+            check("text", "Text is required")
+                .not()
+                .isEmpty()
+        ]
+    ],
+    async (req, res) => {
+        const errors = validationResult(req);
+        if (!errors.isEmpty()) {
+            return res.status(400).json({
+                errors: errors.array()
+            });
+        }
+
+        try {
+            const user = await User.findById(req.user.id).select("-password");
+
+            const post = await Post.findById(req.params.id);
+
+            const newComment = {
+                text: req.body.text,
+                name: user.name,
+                avatar: user.avatar,
+                user: req.user.id
+            };
+
+            post.comments.unshift(newComment);
+            await post.save();
+
+            return res.json(post.comments);
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).send("Server Error");
+        }
+    }
+);
+
+/*
+* @route DELETE api/posts/comment/:id/:comment_id
+* @description: Delete a comment
+* @access Private
+*/
+router.delete(
+    "/comment/:id/:comment_id", auth,
+    async (req, res) => {
+        try {
+            const post = await Post.findById(req.params.id);
+
+            // pull out comment from the post
+            const comment = post.comments.find( comment => comment.id === req.params.comment_id);
+
+            // Make sure comment exists
+            if(!comment) {
+                return res.status(404).json({ msg: 'Comment does not exist'});
+            }
+
+            //check to see if the logged in user actually made the comment, because
+            // only user who actually made the comment should be allowed to delete it
+            // some other user shouldn't be allowed to delete it
+
+            // the user is type of object id, so we need to turn it into string, the same thing
+            // happened earlier
+            if(comment.user.toString() !== req.user.id){
+                return res.status(401).json({ msg: "Unauthorized User" });
+            }
+
+            post.comments = post.comments.filter(item => item.id !== comment.id);
+            await post.save();
+
+            return res.json(post.comments);
+        } catch (error) {
+            console.error(error.message);
+            res.status(500).send("Server Error");
+        }
+    }
+);
+
 module.exports = router;
