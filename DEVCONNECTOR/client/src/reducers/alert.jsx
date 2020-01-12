@@ -18,11 +18,11 @@ const initialState = [];
 
 const alertFunction = (state = initialState, action) => {
     const {type, payload} = action;
-    switch (action.type) {
+    switch (type) {
         case SET_ALERT:
             // since state is immutable, we need to return all states, so we need spread operator
             // set alert will set an alert
-            return [...state,payload.msg];
+            return [...state,payload];
         case REMOVE_ALERT:
             // remove alert will remove a specific alert, we have to find it by id
             return state.filter(alert => alert.id !== payload);
