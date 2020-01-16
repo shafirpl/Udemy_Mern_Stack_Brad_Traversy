@@ -1,11 +1,38 @@
 import axios from 'axios';
 import {
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    USER_LOADED,
+    AUTH_ERROR
 } from '../actions/types.jsx';
+
+import setAuthToken from '../utils/setAuthTokes.jsx';
 
 
 import {setAlert} from './alert.jsx'
+
+// Load User
+export const loadUser = () => async dispatch =>  {
+    if(localStorage.token) {
+        // setting up the global header token, why we are doing it? look at the file this function was 
+        // imported from
+        setAuthToken(localStorage.token)
+    }
+
+    try {
+        const res = await axios.get('/api/auth');
+        dispatch({
+            // the user data will be the payload, or data containing about info about the user 
+            type: USER_LOADED,
+            payload: res.data
+        });
+    } catch (error) {
+        dispatch({
+            type: AUTH_ERROR,
+
+        });
+    }
+}
 
 // Register User
 

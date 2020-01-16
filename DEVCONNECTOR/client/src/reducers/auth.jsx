@@ -1,6 +1,8 @@
 import {
     REGISTER_SUCCESS,
-    REGISTER_FAIL
+    REGISTER_FAIL,
+    USER_LOADED,
+    AUTH_ERROR
 } from '../actions/types.jsx';
 
 const initialState = {
@@ -17,6 +19,14 @@ const initialState = {
 export default (state = initialState, action) => {
     const {type, payload} = action
     switch(type) {
+        case USER_LOADED:
+            return {
+                ...state,
+                isAuthenticated: true,
+                loading: false,
+                // recall from the auth.jsx action file, the payload sent res.data which contains all info about user
+                user: payload
+            }
         case REGISTER_SUCCESS: 
             /*
             * If the user successfully registers, we set the token to the local storage like a cookie
@@ -30,7 +40,9 @@ export default (state = initialState, action) => {
                 loading: false
             }
 
+        // this means both REGISTER_FAIL and AUTH_ERROR will do the same thing
         case REGISTER_FAIL:
+        case AUTH_ERROR:
             localStorage.removeItem('token');
             return {
                 ...state,
