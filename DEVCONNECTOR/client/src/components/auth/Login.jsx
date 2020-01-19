@@ -1,10 +1,18 @@
 import React from 'react';
 import { useState } from 'react';
-import {Link} from 'react-router-dom';
+import { Link, Redirect } from 'react-router-dom';
+import { connect } from "react-redux";
+//import { setAlert } from "../../actions/alert.jsx";
+import PropTypes from "prop-types";
+import { login } from '../../actions/auth.jsx';
 // import axios from 'axios';
 
-
-const Login = () => {
+// here we are just destructuring so we don't need to use props.login
+// this is similar to {login} = props
+// we could do something like const Login = (props)
+// then login = props.login, isAuthenticated = props.isAuthenticated etc
+// look at the last line, I wrote comment how I have access to isAuthenticated
+const Login = ({ login, isAuthenticated }) => {
     const [formData, setFormData] = useState({
         email: '',
         password: ''
@@ -12,34 +20,35 @@ const Login = () => {
 
     const handleSubmit = async e => {
         e.preventDefault();
-        console.log("Success");
+        // console.log("Success");
+        login(email, password);
 
-            /*
-            * the commented section is simpler way to register an user without using redux
-            */
-            /*
-            * this is equivalent of doing name: name, email:email etc
-            */
-            // const newUser = {
-            //     name,
-            //     email,
-            //     password
-            // }
-            // try {
-            //     const config = {
-            //         headers:{
-            //             'Content-Type': 'application/json',
-            //         }    
-            //     }
-            //     const body = JSON.stringify(newUser);
-            //     // since we added proxy in package.json file in the client folder, we don't need to 
-            //     // add localhost:5000
-            //     const res = await axios.post('/api/users', body, config);
-            //     console.log(res.data);
+        /*
+        * the commented section is simpler way to register an user without using redux
+        */
+        /*
+        * this is equivalent of doing name: name, email:email etc
+        */
+        // const newUser = {
+        //     name,
+        //     email,
+        //     password
+        // }
+        // try {
+        //     const config = {
+        //         headers:{
+        //             'Content-Type': 'application/json',
+        //         }    
+        //     }
+        //     const body = JSON.stringify(newUser);
+        //     // since we added proxy in package.json file in the client folder, we don't need to 
+        //     // add localhost:5000
+        //     const res = await axios.post('/api/users', body, config);
+        //     console.log(res.data);
 
-            // } catch (error) {
-            //     console.error(error.response.data);
-            // }
+        // } catch (error) {
+        //     console.error(error.response.data);
+        // }
     }
 
     const handleOnChange = e => {
@@ -47,6 +56,11 @@ const Login = () => {
     }
 
     const { email, password } = formData;
+
+    //Redirect if logged in
+    if (isAuthenticated) {
+        return <Redirect to="/dashboard" />
+    }
     return (
         <div>
             <h1 className="large text-primary">Sign In</h1>
@@ -84,4 +98,27 @@ const Login = () => {
     )
 }
 
-export default Login
+/*
+* https://reactjs.org/docs/typechecking-with-proptypes.html
+* we are using it as a type checking thing. It is not essential but it helps to reduce bugs
+*/
+
+Login.prototype = {
+    login: PropTypes.func.isRequired,
+    isAuthenticated: PropTypes.bool,
+};
+
+// kind of assume that what we pass in the first argument of connect, it will receive the existing state whenever
+// the state gets updated
+const mapStateToProps = state => ({
+    isAuthenticated: state.auth.isAuthenticated
+});
+/* we are connecting this component to the redux
+* this is for redux
+* Connect takes two arguments in the first (), the state and
+* Second argument is any action we want to use that we imported from action files
+* This will allow us to acces props.login
+* Also it will allow us to access isAuthenticated, or whatever mapStateToProps function returns
+*/
+
+export default connect(mapStateToProps, { login })(Login)

@@ -2,7 +2,10 @@ import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
     USER_LOADED,
-    AUTH_ERROR
+    AUTH_ERROR,
+    LOGIN_SUCCESS,
+    LOGIN_FAIL,
+    LOGOUT
 } from '../actions/types.jsx';
 
 const initialState = {
@@ -28,6 +31,7 @@ export default (state = initialState, action) => {
                 user: payload
             }
         case REGISTER_SUCCESS: 
+        case LOGIN_SUCCESS:
             /*
             * If the user successfully registers, we set the token to the local storage like a cookie
             * we are getting the payload token from the backend
@@ -43,6 +47,8 @@ export default (state = initialState, action) => {
         // this means both REGISTER_FAIL and AUTH_ERROR will do the same thing
         case REGISTER_FAIL:
         case AUTH_ERROR:
+        case LOGIN_FAIL:
+        case LOGOUT:
             localStorage.removeItem('token');
             return {
                 ...state,

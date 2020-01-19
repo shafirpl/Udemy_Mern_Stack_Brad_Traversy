@@ -3,7 +3,10 @@ import {
     REGISTER_SUCCESS,
     REGISTER_FAIL,
     USER_LOADED,
-    AUTH_ERROR
+    AUTH_ERROR,
+    LOGIN_SUCCESS,
+    LOGIN_FAIL,
+    LOGOUT
 } from '../actions/types.jsx';
 
 import setAuthToken from '../utils/setAuthTokes.jsx';
@@ -51,6 +54,7 @@ export const register = ({name,email,password}) => async dispatch => {
             type: REGISTER_SUCCESS,
             payload: res.data
         });
+        dispatch(loadUser());
     } catch (error) {
         /* 
         * not sure about this one
@@ -74,4 +78,53 @@ export const register = ({name,email,password}) => async dispatch => {
             type: REGISTER_FAIL
         });
     }
+}
+
+// Login User
+
+export const login = (email,password) => async dispatch => {
+    const config= {
+        headers: {
+            'Content-Type': 'application/json',
+        }
+    }
+
+    const body = JSON.stringify({email,password});
+
+    try {
+        const res = await axios.post('/api/auth',body,config);
+        dispatch({
+            type: LOGIN_SUCCESS,
+            payload: res.data
+        });
+
+        dispatch(loadUser());
+    } catch (error) {
+        /* 
+        * not sure about this one
+        * most probably https://gist.github.com/fgilio/230ccd514e9381fafa51608fcf137253
+        * so axios errors has a response object, which holds the data object, and we defined the errors to be errors
+        * so data has errors array
+        * this errors are coming from backend, look at routes/api/auth.js
+        * there the middleware performs some check, and if the check fails, we send/return an error array
+        * as well as status 400 (line 92)
+        * we get the errors array using validationResult(req) in that file
+        * Uncomment and See the console logs to see what error.response looks like
+        * just plain error looks weird
+        */ 
+
+        // console.log(error);
+        // console.log(error.response);
+        // console.log(error.response.data);
+        const errors = error.response.data.errors;
+        errors.forEach(error => dispatch(setAlert(error.msg,'danger',5000)));
+        dispatch({
+            type: LOGIN_FAIL
+        });
+    }
+}
+
+// Log out and clear profile
+export const logout = () => dispatch => {
+    dispatch({ type: LOGOUT});
 }
