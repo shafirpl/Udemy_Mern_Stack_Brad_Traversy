@@ -5,7 +5,9 @@ import Landing from './components/layout/Landing.jsx';
 import Register from './components/auth/Register.jsx';
 import Login from './components/auth/Login.jsx';
 import Alert from './components/layout/Alert.jsx';
+import Dashboard from './components/dashboard/Dashboard.jsx';
 import { loadUser } from './actions/auth.jsx';
+import PrivateRoute from './components/routing/PrivateRoute.jsx';
 // import setAuthToken from './utils/setAuthTokes';
 
 // this imports are for redux, we need 2 stuff, a provider and the store file
@@ -41,6 +43,7 @@ const App = () => {
             <Switch>
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <PrivateRoute exact path = "/dashboard" component = {Dashboard} />
             </Switch>
           </section>
         </Fragment>

@@ -110,9 +110,22 @@ Login.prototype = {
 
 // kind of assume that what we pass in the first argument of connect, it will receive the existing state whenever
 // the state gets updated
-const mapStateToProps = state => ({
-    isAuthenticated: state.auth.isAuthenticated
-});
+
+/*
+* We use () in an arrow function to return an object without using the return keyword, however, if we want, we could
+* do something like this
+const mapStateToProps = state => {
+    return {
+        isAuthenticated: state.auth.isAuthenticated
+    };
+};
+*/
+
+const mapStateToProps = state => (
+    {isAuthenticated: state.auth.isAuthenticated}
+);
+
+
 /* we are connecting this component to the redux
 * this is for redux
 * Connect takes two arguments in the first (), the state and
