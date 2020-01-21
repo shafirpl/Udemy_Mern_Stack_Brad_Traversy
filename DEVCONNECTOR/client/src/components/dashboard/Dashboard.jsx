@@ -12,7 +12,9 @@ const {getCurrentProfile, auth, profile} = props
 is equivalent to the bottom line
 */
 const Dashboard = ({getCurrentProfile, auth: {user}, profile: {profile,loading}}) => {
-
+const showSomething =() => {
+    
+}
     useEffect (() => {
         getCurrentProfile();
     }, []);
