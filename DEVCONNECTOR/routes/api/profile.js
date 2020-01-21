@@ -13,7 +13,7 @@ const User = require("../../models/Users");
  * @access Private
  */
 
-router.get("/me", auth, async (req, res) => {
+router.get('/me', auth, async (req, res) => {
   try {
     /*
      * https://mongoosejs.com/docs/populate.html

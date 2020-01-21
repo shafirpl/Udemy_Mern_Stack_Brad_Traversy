@@ -6,7 +6,8 @@ import {
     AUTH_ERROR,
     LOGIN_SUCCESS,
     LOGIN_FAIL,
-    LOGOUT
+    LOGOUT,
+    CLEAR_PROFILE
 } from '../actions/types.jsx';
 
 import setAuthToken from '../utils/setAuthTokes.jsx';
@@ -126,5 +127,6 @@ export const login = (email,password) => async dispatch => {
 
 // Log out and clear profile
 export const logout = () => dispatch => {
+    dispatch({ type: CLEAR_PROFILE });
     dispatch({ type: LOGOUT});
 }
