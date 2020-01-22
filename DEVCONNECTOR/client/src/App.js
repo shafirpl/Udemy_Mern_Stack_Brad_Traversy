@@ -6,6 +6,7 @@ import Register from './components/auth/Register.jsx';
 import Login from './components/auth/Login.jsx';
 import Alert from './components/layout/Alert.jsx';
 import Dashboard from './components/dashboard/Dashboard.jsx';
+import CreateProfile from './components/profile-forms/CreateProfile.jsx';
 import { loadUser } from './actions/auth.jsx';
 import PrivateRoute from './components/routing/PrivateRoute.jsx';
 // import setAuthToken from './utils/setAuthTokes';
@@ -43,13 +44,14 @@ const App = () => {
             <Switch>
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
-              <PrivateRoute exact path = "/dashboard" component = {Dashboard} />
+              <PrivateRoute exact path="/dashboard" component={Dashboard} />
+              <PrivateRoute exact path="/create-profile" component={CreateProfile} />
             </Switch>
           </section>
         </Fragment>
       </Router>
     </Provider>
-  )
+  );
 };
 
 export default App;
