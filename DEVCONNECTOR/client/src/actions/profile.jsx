@@ -10,7 +10,7 @@ export const getCurrentProfile = () => async dispatch => {
         const res = await axios.get('/api/profile/me');
         dispatch({
             type: GET_PROFILE,
-            action: res.data
+            payload: res.data
         })
     } catch (error) {
         dispatch({
@@ -34,7 +34,7 @@ export const createProfile = (fromData, history, edit = false) => async dispatch
         const res = await axios.post('/api/profile', fromData, config);
         dispatch({
             type: GET_PROFILE,
-            action: res.data
+            payload: res.data
         });
 
 
