@@ -10,6 +10,7 @@ import CreateProfile from './components/profile-forms/CreateProfile.jsx';
 import { loadUser } from './actions/auth.jsx';
 import PrivateRoute from './components/routing/PrivateRoute.jsx';
 // import setAuthToken from './utils/setAuthTokes';
+import EditProfile from "./components/profile-forms/EditProfile.jsx";
 
 // this imports are for redux, we need 2 stuff, a provider and the store file
 
@@ -46,6 +47,7 @@ const App = () => {
               <Route exact path="/login" component={Login} />
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/create-profile" component={CreateProfile} />
+              <PrivateRoute exact path = "/edit-profile" component = {EditProfile} />
             </Switch>
           </section>
         </Fragment>
