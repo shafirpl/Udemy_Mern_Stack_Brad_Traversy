@@ -36,7 +36,7 @@ router.get('/me', auth, async (req, res) => {
     return res.json(profile);
   } catch (err) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
@@ -179,7 +179,7 @@ router.post(
       return res.json(profile);
     } catch (error) {
       console.error(error.message);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
     }
   }
   
@@ -194,10 +194,10 @@ router.post(
 router.get("/", async (req, res) => {
   try {
     const profiles = await Profile.find().populate("user", ["name", "avatar"]);
-    res.json(profiles);
+    return res.json(profiles);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
@@ -217,7 +217,7 @@ router.get("/user/:user_id", async (req, res) => {
       return res.status(400).json({ msg: "Profile not found" });
     }
 
-    res.json(profile);
+    return res.json(profile);
   } catch (error) {
     console.error(error.message);
     /*
@@ -234,7 +234,7 @@ router.get("/user/:user_id", async (req, res) => {
         msg: "Profile not found"
       });
     }
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
@@ -256,10 +256,10 @@ router.delete("/", auth, async (req, res) => {
     await Profile.findOneAndRemove({ user: req.user.id });
     // Remove User
     await User.findOneAndRemove({ _id: req.user.id });
-    res.json({ msg: "User Deleted" });
+    return res.json({ msg: "User Deleted" });
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
@@ -319,10 +319,10 @@ router.put(
        */
       profile.experience.unshift(newExp);
       await profile.save();
-      res.json(profile);
+      return res.json(profile);
     } catch (error) {
       console.error(error.message);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
     }
   }
 );
@@ -361,10 +361,10 @@ router.delete("/experience/:exp_id", auth, async (req, res) => {
       item => item.id !== req.params.exp_id
     );
     await profile.save();
-    res.json(profile);
+    return res.json(profile);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
@@ -428,10 +428,10 @@ router.put(
        */
       profile.education.unshift(newEdu);
       await profile.save();
-      res.json(profile);
+      return res.json(profile);
     } catch (error) {
       console.error(error.message);
-      res.status(500).send("Server Error");
+      return res.status(500).send("Server Error");
     }
   }
 );
@@ -470,10 +470,10 @@ router.delete("/education/:edu_id", auth, async (req, res) => {
       item => item.id !== req.params.edu_id
     );
     await profile.save();
-    res.json(profile);
+    return res.json(profile);
   } catch (error) {
     console.error(error.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 
@@ -519,7 +519,7 @@ router.get("/github/:username", async (req, res) => {
     } )
   } catch (error) {
     console.error(err.message);
-    res.status(500).send("Server Error");
+    return res.status(500).send("Server Error");
   }
 });
 

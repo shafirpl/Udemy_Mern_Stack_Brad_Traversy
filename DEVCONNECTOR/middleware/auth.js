@@ -19,7 +19,7 @@ module.exports = (req,res,next) => {
 
     if(!token){
         // 401 is unathorized access error http code
-        res.status(401).json({msg:"No token, authorization denied"});
+        return res.status(401).json({msg:"No token, authorization denied"});
 
     }
 
@@ -34,6 +34,6 @@ module.exports = (req,res,next) => {
     } catch(err){
         // this will happen if the token is not valid
         // res.send(err);
-        res.status(401).json({msg:"Token is not valid"});
+        return res.status(401).json({msg:"Token is not valid"});
     }
 }
