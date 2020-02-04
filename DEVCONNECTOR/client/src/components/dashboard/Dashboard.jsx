@@ -8,6 +8,8 @@ import PropTypes from "prop-types";
 import { getCurrentProfile } from "../../actions/profile.jsx";
 import Spinner from "../layout/Spinner";
 import DashboardActions from "./DashboardActions.jsx";
+import Experience from './Experience.jsx';
+import Education from './Education.jsx';
 /*
 const {getCurrentProfile, auth, profile} = props
 is equivalent to the bottom line
@@ -33,6 +35,8 @@ const Dashboard = ({
                     // the true part of profile != null
                     <Fragment>
                         <DashboardActions />
+                        <Experience  experience = {profile.experience}/>
+                        <Education education = {profile.education}/>
                     </Fragment>
                 ) : (
                         // the false part of profile != null

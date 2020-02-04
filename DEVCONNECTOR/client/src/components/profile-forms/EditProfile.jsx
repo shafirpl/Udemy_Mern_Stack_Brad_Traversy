@@ -262,6 +262,7 @@ const mapStateToProps = state => ({
   profile: state.profile
 });
 
+// withRouter gives us access to history props, we use that as second argument in the function
 export default connect(mapStateToProps, { createProfile, getCurrentProfile })(
   withRouter(EditProfile)
 );

@@ -1,7 +1,7 @@
 import axios from 'axios';
 import { setAlert } from './alert.jsx';
 
-import { GET_PROFILE, PROFILE_ERROR } from './types.jsx';
+import { GET_PROFILE, PROFILE_ERROR, UPDATE_PROFILE } from './types.jsx';
 
 // get current user's profile
 
@@ -24,14 +24,14 @@ export const getCurrentProfile = () => async dispatch => {
 }
 
 // create or update profile
-export const createProfile = (fromData, history, edit = false) => async dispatch => {
+export const createProfile = (formData, history, edit = false) => async dispatch => {
     try {
         const config = {
             header: {
                 'Content-Type': 'application/json'
             }
         }
-        const res = await axios.post('/api/profile', fromData, config);
+        const res = await axios.post('/api/profile', formData, config);
         dispatch({
             type: GET_PROFILE,
             payload: res.data
@@ -59,4 +59,75 @@ export const createProfile = (fromData, history, edit = false) => async dispatch
             }
         });
     }
+};
+
+// Add Experience
+
+export const addExperience = (formData,history) => async dispatch => {
+    try {
+        const config = {
+            header: {
+                'Content-Type': 'application/json'
+            }
+        }
+        const res = await axios.put('/api/profile/experience', formData, config);
+        dispatch({
+            type: UPDATE_PROFILE,
+            payload: res.data
+        });
+
+
+        // remember, we cannot redirect in action, we have to use history.push to redirect
+        dispatch(setAlert('Experience Added', "success"));
+        history.push('/dashboard');
+
+    } catch (error) {
+        const errors = error.response.data.errors;
+        errors.forEach(error =>
+            dispatch(setAlert(error.msg, "danger", 5000))
+        );
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: {
+                msg: error.response.statusText,
+                status: error.response.status
+            }
+        });
+    }
+}
+
+// Add Education
+
+export const addEducation = (formData,history) => async dispatch => {
+    try {
+        const config = {
+            header: {
+                'Content-Type': 'application/json'
+            }
+        }
+        const res = await axios.put('/api/profile/education', formData, config);
+        dispatch({
+            type: UPDATE_PROFILE,
+            payload: res.data
+        });
+
+
+        // remember, we cannot redirect in action, we have to use history.push to redirect
+        dispatch(setAlert('Education Added', "success"));
+        history.push('/dashboard');
+
+    } catch (error) {
+        const errors = error.response.data.errors;
+        errors.forEach(error =>
+            dispatch(setAlert(error.msg, "danger", 5000))
+        );
+        dispatch({
+            type: PROFILE_ERROR,
+            payload: {
+                msg: error.response.statusText,
+                status: error.response.status
+            }
+        });
+    }
+
 }
