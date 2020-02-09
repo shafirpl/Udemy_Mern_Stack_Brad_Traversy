@@ -127,6 +127,11 @@ const AddEducation = ({ addEducation, history }) => {
   );
 };
 
+/*
+* https://reactjs.org/docs/typechecking-with-proptypes.html
+* we are using it as a type checking thing. It is not essential but it helps to reduce bugs
+*/
+
 AddEducation.propTypes = {
   addEducation: PropTypes.func.isRequired
 };

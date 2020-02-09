@@ -17,6 +17,11 @@ const PrivateRoute = (props) => {
     return (<Route {...rest} render={props => !isAuthenticated && !loading ? (<Redirect to="/login" />) : (<Component {...props} />)} />)
 }
 
+/*
+* https://reactjs.org/docs/typechecking-with-proptypes.html
+* we are using it as a type checking thing. It is not essential but it helps to reduce bugs
+*/
+
 PrivateRoute.propTypes = {
     auth: PropTypes.object.isRequired,
 }

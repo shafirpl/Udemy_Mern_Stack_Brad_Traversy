@@ -8,6 +8,12 @@ import { GET_PROFILE, PROFILE_ERROR, UPDATE_PROFILE, CLEAR_PROFILE, ACCOUNT_DELE
 export const getCurrentProfile = () => async dispatch => {
   try {
     const res = await axios.get("/api/profile/me");
+    /*
+    * We are gathering the profile data from backend, packing it in the 
+    * payload, and then dispatching the action with the payload, which will
+    * automatically update the state in central store with necessary/updated
+    * data
+    */
     dispatch({
       type: GET_PROFILE,
       payload: res.data
@@ -112,6 +118,17 @@ export const addEducation = (formData, history) => async dispatch => {
     dispatch(setAlert("Education Added", "success"));
     history.push("/dashboard");
   } catch (error) {
+    /*
+    * most probably https://gist.github.com/fgilio/230ccd514e9381fafa51608fcf137253
+    * so axios errors has a response object, which holds the data object, and we defined the errors to be errors
+    * so data has errors array
+    * this errors are coming from backend, look at routes/api/profile.js
+    * there the middleware performs some check, and if the check fails, we send/return an error array
+    * as well as status 400 (line 92)
+    * we get the errors array using validationResult(req) in that file
+    * Uncomment and See the console logs to see what error.response looks like
+    * just plain error looks weird
+    */ 
     const errors = error.response.data.errors;
     errors.forEach(error => dispatch(setAlert(error.msg, "danger", 5000)));
     dispatch({

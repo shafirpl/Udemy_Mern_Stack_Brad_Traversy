@@ -47,10 +47,21 @@ const Education = ({ education, deleteEducation }) => {
   );
 };
 
+/*
+* https://reactjs.org/docs/typechecking-with-proptypes.html
+* we are using it as a type checking thing. It is not essential but it helps to reduce bugs
+*/
 Education.propTypes = {
   education: PropTypes.array.isRequired,
   deleteEducation: PropTypes.func.isRequired
 };
+
+/* we are connecting this component to the redux
+* this is for redux
+* Connect takes two arguments in the first (), the state and
+* Second argument is any action we want to use that we imported from action files
+* this state gets updated everytime we dispatch an action
+*/
 
 export default connect(null, { deleteEducation })(Education);
 

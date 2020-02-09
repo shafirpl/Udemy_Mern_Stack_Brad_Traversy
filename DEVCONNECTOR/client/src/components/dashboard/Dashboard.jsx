@@ -21,6 +21,13 @@ const Dashboard = ({
     profile: { profile, loading }
 }) => {
     const showSomething = () => { };
+    /*
+    * Recall we use useEffect to initiate some stuff before the component gets
+    * rendered. Here using the getCurrentProfile, which is an action defined in 
+    * profile.jsx file in actions folder, we are trying to gather all the info
+    * about the registered user. As it dispatches the action, the profile state 
+    * will have the necessary data coming from redux central store. 
+    */
     useEffect(() => {
         getCurrentProfile();
     }, []);
@@ -57,6 +64,11 @@ const Dashboard = ({
         );
 };
 
+/*
+* https://reactjs.org/docs/typechecking-with-proptypes.html
+* we are using it as a type checking thing. It is not essential but it helps to reduce bugs
+*/ 
+
 Dashboard.propTypes = {
     getCurrentProfile: PropTypes.func.isRequired,
     deleteAccount: PropTypes.func.isRequired,
@@ -68,5 +80,15 @@ const mapStateToProps = state => ({
     auth: state.auth,
     profile: state.profile
 });
+
+
+
+/* we are connecting this component to the redux
+* this is for redux
+* Connect takes two arguments in the first (), the state and
+* Second argument is any action we want to use that we imported from action files
+* This will allow us to acces auth and profile.
+* this state gets updated everytime we dispatch an action
+*/
 
 export default connect(mapStateToProps, { getCurrentProfile,deleteAccount })(Dashboard);

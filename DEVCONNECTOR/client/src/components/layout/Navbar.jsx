@@ -38,6 +38,10 @@ const Navbar = ({ auth: { isAuthenticated, loading }, logout }) => {
         </nav>
     )
 }
+/*
+* https://reactjs.org/docs/typechecking-with-proptypes.html
+* we are using it as a type checking thing. It is not essential but it helps to reduce bugs
+*/
 
 Navbar.propTypes = {
     logout: PropTypes.func.isRequired,

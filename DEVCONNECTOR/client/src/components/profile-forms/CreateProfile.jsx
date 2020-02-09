@@ -220,6 +220,10 @@ const CreateProfile = props => {
     );
 }
 
+/*
+* https://reactjs.org/docs/typechecking-with-proptypes.html
+* we are using it as a type checking thing. It is not essential but it helps to reduce bugs
+*/
 CreateProfile.propTypes = {
     createProfile: PropTypes.func.isRequired,
 }
