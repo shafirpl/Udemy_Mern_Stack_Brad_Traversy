@@ -89,6 +89,11 @@ const mapStateToProps = state => ({
 * Second argument is any action we want to use that we imported from action files
 * This will allow us to acces auth and profile.
 * this state gets updated everytime we dispatch an action
+* When we do connect or the wrap the component 
+* in connect function, the entire state is received in the mapStateToProps function
+* as the first argument from the redux store. The function is called
+* every time when a change in the store's state is detected
+* https://react-redux.js.org/using-react-redux/connect-mapstate
 */
 
 export default connect(mapStateToProps, { getCurrentProfile,deleteAccount })(Dashboard);
