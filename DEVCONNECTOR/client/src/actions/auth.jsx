@@ -26,9 +26,16 @@ export const loadUser = () => async dispatch =>  {
     try {
         const res = await axios.get('/api/auth');
         dispatch({
-            // the user data will be the payload, or data containing about info about the user 
-            type: USER_LOADED,
-            payload: res.data
+          // the user data will be the payload, or data containing about info about the user
+          /*
+           * We are gathering the necessary data from backend using axios, packing it in the
+           * payload, and then dispatching the action with the payload, which will
+           * automatically update the state in central store with necessary/updated
+           * data. We have to define that in the reducer, like what are we going to
+           * handle the action to update the store in the reducer
+           */
+          type: USER_LOADED,
+          payload: res.data
         });
     } catch (error) {
         dispatch({

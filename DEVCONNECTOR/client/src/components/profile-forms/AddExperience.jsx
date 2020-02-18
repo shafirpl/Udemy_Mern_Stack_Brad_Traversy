@@ -138,6 +138,9 @@ AddExperience.propTypes = {
 * as the first argument from the redux store. The function is called
 * every time when a change in the store's state is detected
 * https://react-redux.js.org/using-react-redux/connect-mapstate
+*
+* We are wrapping this component in withRouter because this will allow us to use history.push to 
+* go back to previous page
 */
 
 export default connect(null, { addExperience })(withRouter(AddExperience));

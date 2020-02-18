@@ -3,9 +3,17 @@ import {
   GET_PROFILES,
   PROFILE_ERROR,
   CLEAR_PROFILE,
-  UPDATE_PROFILE
+  UPDATE_PROFILE,
+  GET_REPOS
 } from "../actions/types.jsx";
 
+/*
+* In the reducer file, we basically update the application state based on the action type we received from the action
+* file with the necessary data/payload that we also received from the action file. Recall that action file sends an
+* action type and a payload/necessary data, which we use to update the entire application state.
+*
+* Usually we return the unpacked entire state (by doing ...state), and only update the necessary part in a return statement
+*/
 
 const initialState = {
   profile: null,
@@ -46,6 +54,12 @@ export default (state = initialState, action) => {
         repos: [],
         loading: false
       };
+    case GET_REPOS:
+      return {
+        ...state,
+        repos: payload,
+        loading: false
+      }
     default:
       return state;
   }

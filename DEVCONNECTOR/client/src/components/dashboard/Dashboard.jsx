@@ -1,9 +1,10 @@
 import React, { useEffect, Fragment } from "react";
-import { useState } from "react";
-import { Link, Redirect } from "react-router-dom";
+// import { useState } from "react";
+// import { Link, Redirect } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
 //import { setAlert } from "../../actions/alert.jsx";
-import { login } from "../../actions/auth.jsx";
+// import { login } from "../../actions/auth.jsx";
 import PropTypes from "prop-types";
 import { getCurrentProfile, deleteAccount } from "../../actions/profile.jsx";
 import Spinner from "../layout/Spinner";
@@ -20,17 +21,19 @@ const Dashboard = ({
     auth: { user },
     profile: { profile, loading }
 }) => {
-    const showSomething = () => { };
+    
     /*
     * Recall we use useEffect to initiate some stuff before the component gets
     * rendered. Here using the getCurrentProfile, which is an action defined in 
     * profile.jsx file in actions folder, we are trying to gather all the info
     * about the registered user. As it dispatches the action, the profile state 
     * will have the necessary data coming from redux central store. 
+    * Similarly we wanna run it once and have to give it a dependency to get rid of console warning message,
+    * That is why we are giving getCurrentProfile inside []
     */
     useEffect(() => {
         getCurrentProfile();
-    }, []);
+    }, [getCurrentProfile]);
     return loading && profile === null ? (
         <Spinner />
     ) : (
