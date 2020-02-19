@@ -1,10 +1,22 @@
+/*
+* This component renders a single profile information, which it fetches by id
+*/
 import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
 import Spinner from "../layout/Spinner";
 import { getProfileById, getCurrentProfile } from "../../actions/profile.jsx";
 import {Link} from 'react-router-dom';
+import ProfileTop from './ProfileTop.jsx';
+import ProfileAbout from './ProfileAbout.jsx';
+import ProfileExperience from './ProfileExperience.jsx';
+import ProfileEducation from './ProfileEducation.jsx';
 // we are destructuring the received argument here
+/*
+* if we had props, then we would do
+* const {getProfileById, profile, auth, math} = props
+* const {profile, loading} = profile
+*/
 const Profile = ({
   getProfileById,
   profile: { profile, loading },
@@ -48,9 +60,9 @@ const Profile = ({
               </Link>
             )}
           <div className="profile-grid my-1">
-                {/* <ProfileTop profile={profile} />
-                <ProfileAbout profile={profile} /> */}
-            {/* <div className="profile-exp bg-white p-2">
+                <ProfileTop profile={profile} />
+                <ProfileAbout profile={profile} />
+            <div className="profile-exp bg-white p-2">
               <h2 className="text-primary">Experience</h2>
               {profile.experience.length > 0 ? (
                 <Fragment>
@@ -64,9 +76,9 @@ const Profile = ({
               ) : (
                 <h4>No experience credentials</h4>
               )}
-            </div> */}
+            </div>
 
-            {/* <div className="profile-edu bg-white p-2">
+            <div className="profile-edu bg-white p-2">
               <h2 className="text-primary">Education</h2>
               {profile.education.length > 0 ? (
                 <Fragment>
@@ -80,7 +92,7 @@ const Profile = ({
               ) : (
                 <h4>No education credentials</h4>
               )}
-            </div> */}
+            </div>
 
             {/* {profile.githubusername && (
               <ProfileGithub username={profile.githubusername} />
