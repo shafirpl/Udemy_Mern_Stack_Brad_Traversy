@@ -67,6 +67,8 @@ Experience.propTypes = {
 * as the first argument from the redux store. The function is called
 * every time when a change in the store's state is detected
 * https://react-redux.js.org/using-react-redux/connect-mapstate
+* Also the component then will receive these mapStateToProps and the action as argument as well,
+* which we can use destructuring to gather necessary info
 */
 
 export default connect(null, { deleteExperience })(Experience);

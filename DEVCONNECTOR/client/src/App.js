@@ -13,6 +13,7 @@ import PrivateRoute from './components/routing/PrivateRoute.jsx';
 import EditProfile from "./components/profile-forms/EditProfile.jsx";
 import AddExperience from "./components/profile-forms/AddExperience.jsx";
 import AddEducation from "./components/profile-forms/AddEducation.jsx";
+import Profile from './components/profile/Profile.jsx';
 import Profiles from "./components/profiles/Profiles.jsx";
 
 // this imports are for redux, we need 2 stuff, a provider and the store file
@@ -31,8 +32,9 @@ import './App.css';
 // watch from 11:08
 // https://www.udemy.com/course/mern-stack-front-to-back/learn/lecture/14555612?start=0#overview
 // for the useEffect part why we have empty bracket
-// Look up useEffect documentation, so basically it will run first as well as every time any component gets updated,
+// Look up useEffect documentation, so basically it will runevery time any component gets updated,
 // so we dispatch the loaduser, which sets ups the global token and adds it automatically to every request
+// 
 const App = () => {
   useEffect(() => {
     store.dispatch(loadUser())
@@ -48,6 +50,7 @@ const App = () => {
             <Switch>
               <Route exact path="/register" component={Register} />
               <Route exact path="/login" component={Login} />
+              <Route exact path="/profile/:id" component={Profile} />
               <Route exact path = "/profiles" component = {Profiles} />
               <PrivateRoute exact path="/dashboard" component={Dashboard} />
               <PrivateRoute exact path="/create-profile" component={CreateProfile} />

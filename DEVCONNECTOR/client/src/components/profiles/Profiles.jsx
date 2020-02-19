@@ -21,10 +21,13 @@ const {profiles,loading} = profile
 */
 const Profiles = ({ getProfiles, profile: { profiles, loading } }) => {
   /*
-   * Recall useEffect will run first when the component gets rendered, and we only want it to run once, that is why
+   * Recall useEffect will run first after the component gets rendered, and we only want it to run once, that is why
    * we are putting getProfiles in the [], this also means that we are giving the dependency for this useState.
    * Empty bracket also works, but gives us a dependency console warning
    * https://reactjs.org/docs/hooks-effect.html
+   * This is equivalent to componentDiDMount (Read colt steele google doc to see what componeneDidMount does)
+   * Also read useEffect on the doc
+   * We usually loads state, handle ajax calls etc in useEffect
    */
   useEffect(() => {
     getProfiles();
@@ -80,6 +83,8 @@ const mapStateToProps = state => ({
  * as the first argument from the redux store. The function is called
  * every time when a change in the store's state is detected
  * https://react-redux.js.org/using-react-redux/connect-mapstate
+ * Also the component then will receive these mapStateToProps and the action as argument as well,
+ * which we can use destructuring to gather necessary info
  */
 
 export default connect(mapStateToProps, { getProfiles })(Profiles);

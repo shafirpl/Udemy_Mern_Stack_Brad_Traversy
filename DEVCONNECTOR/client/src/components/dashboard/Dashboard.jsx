@@ -23,13 +23,16 @@ const Dashboard = ({
 }) => {
     
     /*
-    * Recall we use useEffect to initiate some stuff before the component gets
-    * rendered. Here using the getCurrentProfile, which is an action defined in 
+    * Recall we use useEffect to initiate some stuff.
+    * Here using the getCurrentProfile, which is an action defined in 
     * profile.jsx file in actions folder, we are trying to gather all the info
     * about the registered user. As it dispatches the action, the profile state 
     * will have the necessary data coming from redux central store. 
     * Similarly we wanna run it once and have to give it a dependency to get rid of console warning message,
     * That is why we are giving getCurrentProfile inside []
+    * This is equivalent to componentDiDMount (Read colt steele google doc to see what componeneDidMount does)
+    * Also read useEffect on the doc
+    * We usually loads state, handle ajax calls etc in useEffect
     */
     useEffect(() => {
         getCurrentProfile();
@@ -97,6 +100,8 @@ const mapStateToProps = state => ({
 * as the first argument from the redux store. The function is called
 * every time when a change in the store's state is detected
 * https://react-redux.js.org/using-react-redux/connect-mapstate
+* Also the component then will receive these mapStateToProps and the action as argument as well,
+* which we can use destructuring to gather necessary info
 */
 
 export default connect(mapStateToProps, { getCurrentProfile,deleteAccount })(Dashboard);

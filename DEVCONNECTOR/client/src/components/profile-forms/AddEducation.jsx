@@ -149,6 +149,9 @@ AddEducation.propTypes = {
 *
 * We are wrapping this component in withRouter because this will allow us to use history.push to 
 * go back to previous page
+*
+* Also the component then will receive these mapStateToProps and the action as argument as well,
+* which we can use destructuring to gather necessary info
 */
 
 export default connect(null, { addEducation })(withRouter(AddEducation));
