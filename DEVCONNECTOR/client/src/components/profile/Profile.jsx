@@ -11,6 +11,7 @@ import ProfileTop from './ProfileTop.jsx';
 import ProfileAbout from './ProfileAbout.jsx';
 import ProfileExperience from './ProfileExperience.jsx';
 import ProfileEducation from './ProfileEducation.jsx';
+import ProfileGithub from './ProfileGithub.jsx';
 // we are destructuring the received argument here
 /*
 * if we had props, then we would do
@@ -26,7 +27,7 @@ const Profile = ({
   /*
    * Recall if we want to fetch some data or something like that
    * before the component loads, we use useEffect, which runs first
-   * before the component loads and fetches the necessary data
+   * after the component loads and fetches the necessary data
    *
    * https://scotch.io/courses/using-react-router-4/route-params
    * Basically, react router passes a match object as prop/argument to every route
@@ -40,6 +41,8 @@ const Profile = ({
    * This is equivalent to componentDiDMount (Read colt steele google doc to see what componeneDidMount does)
    * Also read useEffect on the doc
    * We usually loads state, handle ajax calls etc in useEffect
+   * Go through Colt Steele's google doc on React on componentDidMount and
+   * useEffect section to see how it works
    */
   useEffect(() => {
     getProfileById(match.params.id);
@@ -94,9 +97,9 @@ const Profile = ({
               )}
             </div>
 
-            {/* {profile.githubusername && (
+            {profile.githubusername && (
               <ProfileGithub username={profile.githubusername} />
-            )} */}
+            )}
           </div>
         </Fragment>
       )}

@@ -1,0 +1,66 @@
+import {
+  GET_POSTS,
+  POST_ERROR,
+  UPDATE_LIKES,
+  DELETE_POST
+} from "../actions/types";
+
+const initialState = {
+  posts: [],
+  post: null,
+  loading: true,
+  error: {}
+};
+
+/*
+ * In the reducer file, we basically update the application state based on the action type we received from the action
+ * file with the necessary data/payload that we also received from the action file. Recall that action file sends an
+ * action type and a payload/necessary data, which we use to update the entire application state.
+ *
+ * Usually we return the unpacked entire state (by doing ...state), and only update the necessary part in a return statement
+ */
+
+export default (state = initialState, action) => {
+  const { type, payload } = action;
+
+  switch (type) {
+    case GET_POSTS:
+      return {
+        ...state,
+        posts: payload,
+        loading: false
+      };
+    case POST_ERROR:
+      return {
+        ...state,
+        error: payload,
+        loading: false
+      };
+    case UPDATE_LIKES:
+      /*
+       * so we first check if the post id matches, since posts coming from the state
+       * will be an array of posts, so we need to figure out which post we are referring to (an user may have several
+       * posts to his account that is why we have the array)
+       * Then we just manipulate the likes, so if the id doesn't match, keep the post as it is, but if they do, manipulate/update
+       * the likes on the store
+       */
+      return {
+        ...state,
+        posts: state.posts.map(post =>
+          post._id === payload.postId ? { ...post, likes: payload.likes } : post
+        ),
+        loading: false
+      };
+
+    case DELETE_POST:
+      return {
+        ...state,
+        posts: state.posts.filter(post => post._id !== payload),
+        loading: false
+      };
+    default:
+      return {
+        ...state
+      };
+  }
+};

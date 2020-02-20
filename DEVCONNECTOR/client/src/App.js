@@ -15,6 +15,7 @@ import AddExperience from "./components/profile-forms/AddExperience.jsx";
 import AddEducation from "./components/profile-forms/AddEducation.jsx";
 import Profile from './components/profile/Profile.jsx';
 import Profiles from "./components/profiles/Profiles.jsx";
+import Post from './components/posts/Posts.jsx';
 
 // this imports are for redux, we need 2 stuff, a provider and the store file
 
@@ -57,6 +58,7 @@ const App = () => {
               <PrivateRoute exact path = "/edit-profile" component = {EditProfile} />
               <PrivateRoute exact path = "/add-experience" component = {AddExperience} />
               <PrivateRoute exact path = "/add-education" component = {AddEducation} />
+              <PrivateRoute exact path = "/posts" component = {Post}/>
             </Switch>
           </section>
         </Fragment>
