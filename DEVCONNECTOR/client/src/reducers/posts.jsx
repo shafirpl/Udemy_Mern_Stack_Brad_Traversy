@@ -2,6 +2,7 @@ import {
   GET_POSTS,
   POST_ERROR,
   UPDATE_LIKES,
+  ADD_POST,
   DELETE_POST
 } from "../actions/types";
 
@@ -28,6 +29,17 @@ export default (state = initialState, action) => {
       return {
         ...state,
         posts: payload,
+        loading: false
+      };
+
+    case ADD_POST:
+      /*
+       * So basically we are adding new post to the existing posts, so we unpack the state.posts by doing ..., which
+       * will add all the existings posts toe the posts array, and then add the new post that is coming from the payload
+       */
+      return {
+        ...state,
+        posts: [payload,...state.posts],
         loading: false
       };
     case POST_ERROR:

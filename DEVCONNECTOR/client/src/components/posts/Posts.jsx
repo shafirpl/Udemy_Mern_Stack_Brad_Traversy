@@ -5,6 +5,7 @@ import { getPosts } from "../../actions/post.jsx";
 import Spinner from "../layout/Spinner.jsx";
 import { Link } from "react-router-dom";
 import PostItem from './PostItem';
+import PostForm from './PostForm.jsx';
 
 /*
  * Recall that we use useEffect to load necessary data. Go through Colt Steel's
@@ -25,7 +26,7 @@ const Posts = ({ getPosts, post: { posts, loading } }) => {
       <p className="lead">
         <i className="fas fa-user" /> Welcome to the community
       </p>
-      {/* <PostForm /> */}
+      <PostForm />
       <div className="posts">
         {posts.map(post => (
           <PostItem key={post._id} post={post} />
