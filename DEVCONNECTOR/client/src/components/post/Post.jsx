@@ -1,10 +1,12 @@
 import React, { Fragment, useEffect } from "react";
 import PropTypes from "prop-types";
+import { Link } from "react-router-dom";
 import { connect } from "react-redux";
-import { getPosts } from "../../actions/post.jsx";
-import Spinner from "../layout/Spinner.jsx";
-import PostItem from './PostItem';
-import PostForm from './PostForm.jsx';
+import Spinner from "../layout/Spinner";
+import PostItem from "../posts/PostItem";
+import CommentForm from "../post/CommentForm";
+import CommentItem from "../post/CommentItem";
+import { getPost } from "../../actions/post";
 
 /*
  * Recall that we use useEffect to load necessary data. Go through Colt Steel's
@@ -12,35 +14,45 @@ import PostForm from './PostForm.jsx';
  * componentDidMount
  */
 
-const Posts = ({ getPosts, post: { posts, loading } }) => {
-// const Posts = props => {
+/*
+ * https://scotch.io/courses/using-react-router-4/route-params
+ * Basically, react router passes a match object as prop/argument to every route
+ * it renders (recall in the app.js file we are rendering it under a Route component)
+ * inside that match object we have a params object, that will contain info like id and stuff. For
+ * example, in our app.js, one of the routes will render this component and it has an :id in its path. So in order to access
+ * that id we need match.params.id
+ * that param object will allow us to access id and other route parameters
+ */
+const Post = ({ getPost, post: { post, loading }, match }) => {
   useEffect(() => {
-    getPosts();
-  }, [getPosts]);
-  return loading ? (
+    getPost(match.params.id);
+  }, [getPost, match.params.id]);
+
+  return loading || post === null ? (
     <Spinner />
   ) : (
     <Fragment>
-      <h1 className="large text-primary">Posts</h1>
-      <p className="lead">
-        <i className="fas fa-user" /> Welcome to the community
-      </p>
-      <PostForm />
-      <div className="posts">
-        {posts.map(post => (
-          <PostItem key={post._id} post={post} />
+      <Link to="/posts" className="btn">
+        Back To Posts
+      </Link>
+      <PostItem post={post} showActions={false} />
+      <CommentForm postId={post._id} />
+      <div className="comments">
+        {post.comments.map(comment => (
+          <CommentItem key={comment._id} comment={comment} postId={post._id} />
         ))}
       </div>
     </Fragment>
   );
 };
+
 /*
  * https://reactjs.org/docs/typechecking-with-proptypes.html
  * we are using it as a type checking thing. It is not essential but it helps to reduce bugs
  */
 
-Posts.propTypes = {
-  getPosts: PropTypes.func.isRequired,
+Post.propTypes = {
+  getPost: PropTypes.func.isRequired,
   post: PropTypes.object.isRequired
 };
 
@@ -63,4 +75,4 @@ const mapStateToProps = state => ({
  * which we can use destructuring to gather necessary info
  */
 
-export default connect(mapStateToProps, { getPosts })(Posts);
+export default connect(mapStateToProps, { getPost })(Post);

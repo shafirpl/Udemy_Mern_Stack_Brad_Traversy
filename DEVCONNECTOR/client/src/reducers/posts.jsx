@@ -1,9 +1,12 @@
 import {
   GET_POSTS,
+  GET_POST,
   POST_ERROR,
   UPDATE_LIKES,
   ADD_POST,
-  DELETE_POST
+  DELETE_POST,
+  ADD_COMMENT,
+  REMOVE_COMMENT
 } from "../actions/types";
 
 const initialState = {
@@ -32,6 +35,16 @@ export default (state = initialState, action) => {
         loading: false
       };
 
+    /*
+     * This only gets a single post, that is why we are onlu updating the post section of the state
+     */
+    case GET_POST:
+      return {
+        ...state,
+        post: payload,
+        loading: false
+      };
+
     case ADD_POST:
       /*
        * So basically we are adding new post to the existing posts, so we unpack the state.posts by doing ..., which
@@ -39,9 +52,17 @@ export default (state = initialState, action) => {
        */
       return {
         ...state,
-        posts: [payload,...state.posts],
+        posts: [payload, ...state.posts],
         loading: false
       };
+
+    case DELETE_POST:
+      return {
+        ...state,
+        posts: state.posts.filter(post => post._id !== payload),
+        loading: false
+      };
+
     case POST_ERROR:
       return {
         ...state,
@@ -64,12 +85,20 @@ export default (state = initialState, action) => {
         loading: false
       };
 
-    case DELETE_POST:
+    case ADD_COMMENT:
       return {
         ...state,
-        posts: state.posts.filter(post => post._id !== payload),
+        post: { ...state.post, comments: payload },
         loading: false
       };
+    case REMOVE_COMMENT:
+      return {
+        ...state,
+        post: {
+          ...state.post,
+          comments: state.post.comments.filter(comment => comment._id !== payload)
+        }
+      }
     default:
       return {
         ...state

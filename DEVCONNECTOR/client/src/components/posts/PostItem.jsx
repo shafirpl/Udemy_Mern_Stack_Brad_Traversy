@@ -43,12 +43,14 @@ const PostItem = ({
           >
             <i className="fas fa-thumbs-down" />
           </button>
-          <Link to={`/posts/${_id}`} className="btn btn-primary">
+          <Link to={`/post/${_id}`} className="btn btn-primary">
             Discussion{" "}
             {comments.length > 0 && (
               <span className="comment-count">{comments.length}</span>
             )}
           </Link>
+          {/* This part is ensuring that only the author who wrote the post can delete it, other user who didn't write the 
+          post cannot delete it */}
           {!auth.loading && user === auth.user._id && (
             <button
               onClick={() => deletePost(_id)}
@@ -64,6 +66,14 @@ const PostItem = ({
   </div>
 );
 
+/*
+ * ShowActions basically determines whether we wanna show all the controls/buttons for post stuff like that.
+ * so when we are showing the posts/rendering the posts.jsx file, we wanna show them. However when we are rendering a
+ * single post, we don't wanna show that. DefaultProps means if we don't pass any value, showActions will be true.
+ * for example, in Post.jsx file we are passing false to this component, so it will be false, but in posts.jsx file we are
+ * not passing anything, so this will be true and in the posts.jsx file render we can see all post item has the like buttons
+ * and stuff like that.
+ */
 PostItem.defaultProps = {
   showActions: true
 };

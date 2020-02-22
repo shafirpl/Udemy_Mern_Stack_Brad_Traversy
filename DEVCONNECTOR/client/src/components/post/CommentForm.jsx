@@ -1,26 +1,24 @@
 import React, { useState } from "react";
 import PropTypes from "prop-types";
 import { connect } from "react-redux";
-import { addPost } from "../../actions/post";
-
+import { addComment } from "../../actions/post";
 /*
- * We usually use useState whenever we have form, to manipulate the
- * form items
- */
-
-const PostForm = ({ addPost }) => {
+* We usually use useState whenever we have form, to manipulate the
+* form items
+*/
+const CommentForm = ({ postId, addComment }) => {
   const [text, setText] = useState("");
 
   return (
     <div className="post-form">
       <div className="bg-primary p">
-        <h3>Say Something...</h3>
+        <h3>Leave a Comment</h3>
       </div>
       <form
         className="form my-1"
         onSubmit={e => {
           e.preventDefault();
-          addPost({ text });
+          addComment(postId, { text });
           setText("");
         }}
       >
@@ -28,7 +26,7 @@ const PostForm = ({ addPost }) => {
           name="text"
           cols="30"
           rows="5"
-          placeholder="Create a post"
+          placeholder="Comment the post"
           value={text}
           onChange={e => setText(e.target.value)}
           required
@@ -38,13 +36,14 @@ const PostForm = ({ addPost }) => {
     </div>
   );
 };
+
 /*
  * https://reactjs.org/docs/typechecking-with-proptypes.html
  * we are using it as a type checking thing. It is not essential but it helps to reduce bugs
  */
 
-PostForm.propTypes = {
-  addPost: PropTypes.func.isRequired
+CommentForm.propTypes = {
+  addComment: PropTypes.func.isRequired
 };
 
 /* we are connecting this component to the redux
@@ -60,7 +59,6 @@ PostForm.propTypes = {
  * https://react-redux.js.org/using-react-redux/connect-mapstate
  * Also the component then will receive these mapStateToProps and the action as argument as well,
  * which we can use destructuring to gather necessary info
- * Here we are passing null as first argument which means we are not receving any existing state from the redux store
+ * Here null means we are not retreiving any state info from the redux store
  */
-
-export default connect(null, { addPost })(PostForm);
+export default connect(null, { addComment })(CommentForm);
